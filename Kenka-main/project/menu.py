@@ -1,11 +1,12 @@
 import pygame
 import sys
-
+from pygame import mixer
+mixer.init()
 class Menu:
     def __init__(self):
         # Initialize Pygame
         pygame.init()
-
+        pygame.mixer.music.pause()
         # Set up the screen
         self.screen_width, self.screen_height = 1280, 720
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
@@ -56,6 +57,7 @@ class Menu:
                     elif event.key == pygame.K_RETURN:
                         if self.selected_button == "start":
                             print("Start button selected!")
+                            pygame.mixer.music.unpause()
                             # Add your start game logic here
                             return
                         elif self.selected_button == "quit":
@@ -64,6 +66,7 @@ class Menu:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if self.start_button_rect.collidepoint(event.pos):
                         print("Start button clicked!")
+                        pygame.mixer.music.unpause()
                         # Add your start game logic here
                         return
                     elif self.quit_button_rect.collidepoint(event.pos):

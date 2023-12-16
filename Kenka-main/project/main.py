@@ -32,23 +32,23 @@ P2_OFFSET = [90, 79]
 P2_DATA = [P2_SIZE, P2_SCALE, P2_OFFSET]
 
 #load music and sounds
-pygame.mixer.music.load("project/Assets/Sounds/bg_music.wav")
-pygame.mixer.music.set_volume(0.15)
-pygame.mixer.music.play(-1 , 0.0 )
+pygame.mixer.music.load("project/Assets/Sounds/bg_music1.wav")
+pygame.mixer.music.set_volume(0.08)
+
 
 
 #LOAD sound effects
 attack1_fx = pygame.mixer.Sound("project/Assets/Sounds/attack1.wav")
-attack1_fx.set_volume(0.5)
+attack1_fx.set_volume(0.1)
 
-attack2_fx = pygame.mixer.Sound("project/Assets/Sounds/attack2.wav")
-attack2_fx.set_volume(0.5)
+attack2_fx = pygame.mixer.Sound("project/Assets/Sounds/attack1.wav")
+attack2_fx.set_volume(0.1)
 
-death_fx = pygame.mixer.Sound("project/Assets/Sounds/death.wav")
-death_fx.set_volume(0.5)
+death_fx = pygame.mixer.Sound("project/Assets/Sounds/death2.wav")
+death_fx.set_volume(0.15)
 
-death_fx1 = pygame.mixer.Sound("project/Assets/Sounds/death.wav")
-death_fx1.set_volume(0.5)
+death_fx1 = pygame.mixer.Sound("project/Assets/Sounds/death2.wav")
+death_fx1.set_volume(0.15)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Kenka")
@@ -61,8 +61,8 @@ pygame.display.set_icon(icon_image)
 bg_image = pygame.image.load("project/Assets/BackGround/BackGround.png").convert_alpha()
 
 #load spritesheets
-warrior_sheet = pygame.image.load("project/Assets/Hero1/Hero1.png").convert_alpha()
-wizard_sheet = pygame.image.load("project/Assets/Hero2/Hero2.png").convert_alpha()
+P1_sheet = pygame.image.load("project/Assets/Hero1/Hero1.png").convert_alpha()
+P2_sheet = pygame.image.load("project/Assets/Hero2/Hero2.png").convert_alpha()
 # load vitory image
 victory_img = pygame.image.load("project/Assets/icon/victory.png").convert_alpha()
 #Define number of steps
@@ -96,8 +96,8 @@ pause_menu = PauseMenu()
 # Main game function
 def main():
     #Create Fighters
-    fighter_1 = Fighter(1 , 100, 470 , False , P1_DATA , warrior_sheet , WARRIOR_ANIMATION_STEPS , attack1_fx , death_fx)
-    fighter_2 = Fighter(2 ,1100, 470, True , P2_DATA , wizard_sheet , WARRIOR_ANIMATION_STEPS ,  attack2_fx , death_fx1)
+    fighter_1 = Fighter(1 , 100, 470 , False , P1_DATA , P1_sheet, WARRIOR_ANIMATION_STEPS , attack1_fx , death_fx)
+    fighter_2 = Fighter(2 ,1100, 470, True , P2_DATA , P2_sheet , WARRIOR_ANIMATION_STEPS ,  attack2_fx , death_fx1)
     #defiine game variabls
     last_count_update = pygame.time.get_ticks()
     intro_count = 3
@@ -113,7 +113,8 @@ def main():
     main_menu.run_menu()
     clock = pygame.time.Clock()
     run = True
-     
+
+    pygame.mixer.music.play(-1 , 0.0 ) 
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -129,8 +130,8 @@ def main():
                         continue
                     elif result == "reset":
                         # Reset the game
-                        fighter_1 = Fighter(1, 100, 470, False, P1_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, attack1_fx, death_fx)
-                        fighter_2 = Fighter(2, 1100, 470, True, P2_DATA, wizard_sheet, WARRIOR_ANIMATION_STEPS, attack2_fx, death_fx1)
+                        fighter_1 = Fighter(1, 100, 470, False, P1_DATA, P1_sheet, WARRIOR_ANIMATION_STEPS, attack1_fx, death_fx)
+                        fighter_2 = Fighter(2, 1100, 470, True, P2_DATA, P2_sheet, WARRIOR_ANIMATION_STEPS, attack2_fx, death_fx1)
                         score = [0, 0]
                         round_over = False
                         intro_count = 3
@@ -166,8 +167,8 @@ def main():
                 intro_count -= 1
                 last_count_update = pygame.time.get_ticks()
                 #Create Fighters
-                fighter_1 = Fighter(1 , 100, 470 , False , P1_DATA , warrior_sheet , WARRIOR_ANIMATION_STEPS , attack1_fx , death_fx )
-                fighter_2 = Fighter(2 ,1100, 470, True , P2_DATA , wizard_sheet , WARRIOR_ANIMATION_STEPS ,  attack2_fx , death_fx1)
+                fighter_1 = Fighter(1 , 100, 470 , False , P1_DATA , P1_sheet , WARRIOR_ANIMATION_STEPS , attack1_fx , death_fx )
+                fighter_2 = Fighter(2 ,1100, 470, True , P2_DATA , P2_sheet , WARRIOR_ANIMATION_STEPS ,  attack2_fx , death_fx1)
 
 
 
@@ -175,6 +176,7 @@ def main():
         #update fighters
         fighter_1.update()
         fighter_2.update()
+
         #Draw Fighters
         fighter_1.draw(screen)
         fighter_2.draw(screen)

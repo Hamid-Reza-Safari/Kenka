@@ -1,5 +1,6 @@
 import pygame
-
+from pygame import mixer
+mixer.init()
 
 class Fighter():
     def __init__(self, player , x, y , flip, data , sprite_sheet , animation_steps , sound , death):
@@ -64,7 +65,7 @@ class Fighter():
         keys = pygame.key.get_pressed()
         #can't do anything but walk while attacking
         if self.attacking == False and self.alive == True and round_over == False :
-            #player 2 movement
+            #player 1 movement
             if self.player == 1  :
                 # Movement
                 if keys[pygame.K_a]  :
@@ -78,6 +79,7 @@ class Fighter():
                     self.vel_y = - 25
                     self.jump = True
                     self.jump_cooldown = 60
+
                     #attack
                 if keys[pygame.K_e] or keys[pygame.K_q] :
                     self.attack( target)
@@ -90,8 +92,8 @@ class Fighter():
             if self.player == 2  :
                 # Movement
                 if keys[pygame.K_j] or keys[pygame.K_LEFT]:
-                        dx = -SPEED
-                        self.running = True
+                    dx = -SPEED
+                    self.running = True
                 if keys[pygame.K_l] or keys[pygame.K_RIGHT]:
                     dx = SPEED
                     self.running = True
@@ -100,6 +102,7 @@ class Fighter():
                     self.vel_y = - 25
                     self.jump = True
                     self.jump_cooldown = 60
+
                     #attack
                 if keys[pygame.K_u] or keys[pygame.K_o] or keys[pygame.K_KP0] or keys[pygame.K_KP_PERIOD]:
                     self.attack(target)
@@ -147,10 +150,9 @@ class Fighter():
         if self.health <= 0 :
             self.health = 0
             self.alive = False
-            self.death_sound.play()
             self.update_action(6) # DEAD
         #check player action
-        elif self.hit == True :
+        elif self.hit == True   :
             self.update_action(5) # HIT
         elif self.attacking == True:
             if self.attack_type == 1:
@@ -187,18 +189,32 @@ class Fighter():
                         #
                         self.attacking = False
                         self.attack_cooldown = 20
-
-
+        
+            
+    #hit sound 
+    hit_fx = pygame.mixer.Sound("project/Assets/Sounds/hit1.wav")
+    hit_fx.set_volume(0.2)
+    
+        
     def attack (self , target) :
         if self.attack_cooldown == 0 :
             # attack
             self.attacking = True
             self.attack_sound.play()
             attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip) , self.rect.y , 2 * self.rect.width , self.rect.height)
-            if attacking_rect.colliderect(target.rect) :
-                target.health -= 10
+            if attacking_rect.colliderect(target.rect)  :
                 target.hit = True
+                print("Attack hit!")
+            if target.hit == True and  target.jump == False : #cant deal damage if targer is jumping
+                self.hit_fx.play()
+                target.health -= 10
+                print("Damage Done!")
+                if target.health == 0:
+                    #play death fx if target dead
+                    self.death_sound.play()
     
+               
+
     
 
 
